@@ -1,18 +1,25 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import MapGL, { FlyToInterpolator } from "react-map-gl";
+import MapGL from "react-map-gl";
 import axios from "axios";
 import { get, isEmpty } from "lodash";
 import SearchBox from "../../components/SearchBox";
 import SearchListItem from "../../components/SearchListItem";
+import {LOADING} from "../../constants/loading";
+import PropTypes from "prop-types";
+import { ZoomControl } from "react-mapbox-gl";
 
 axios.defaults.baseURL = process.env.REACT_APP_MAPBOX_BASE_URL;
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-const SearchableMapComponent = () => {
+const SearchableMapComponent = props => {
+  const {
+    isLoading,
+    setLoading
+  } = props;
   const mapRef = useRef();
   const [locations, setLocations] = useState([]);
-  const [search, setSearch] = useState({ text: '', isLoading: false, });
+  const [search, setSearch] = useState('');
   const [viewport, setViewport] = useState({
     longitude: 101.69956738701049,
     latitude: 3.147498159675069,
@@ -40,7 +47,7 @@ const SearchableMapComponent = () => {
   
   const getLocationSuggestion = async (text) => {
     const endpoint = `/geocoding/v5/mapbox.places/${text}.json?proximity=ip&access_token=${MAPBOX_ACCESS_TOKEN}&limit=10`;
-    setSearch(state => ({...state, isLoading: true}))
+    setLoading(LOADING.SEARCH_LOCATION)
     try {
       const response = await axios.get(endpoint);
       const data = get(response, 'data.features', []);
@@ -52,7 +59,7 @@ const SearchableMapComponent = () => {
     } catch (error) {
       console.error("Error in fetch locations: ", error)
     } finally {
-      setSearch(state => ({ ...state, isLoading: false }))
+      setLoading("")
     }
   };
 
@@ -62,17 +69,11 @@ const SearchableMapComponent = () => {
     } else {
       await getLocationSuggestion(text)
     }
-    setSearch(state => ({
-      ...state,
-      text: text
-    }));
+    setSearch(text);
   };
 
   const handleClearSearch = () => {
-    setSearch(state => ({
-      ...state,
-      text: ''
-    }));
+    setSearch('');
     setLocations([]);
   }
 
@@ -93,14 +94,20 @@ const SearchableMapComponent = () => {
         width="100%"
         height="100%"
         onViewportChange={handleViewportChange}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+        // onTouchEnd={handleViewportChange}
+        asyncRender={true}
       >
+        {/* <ZoomControl
+          position="bottom-right"
+          onViewportChange={handleViewportChange}
+        /> */}
         <SearchBox
-          value={search.text}
+          value={search}
           listData={locations}
-          isLoading={get(search, 'isLoading', false)}
-          shwoClose={!get(search, 'isLoading', false) && get(search, 'text', '') !== ""}
+          isLoading={isLoading === LOADING.SEARCH_LOCATION}
+          shwoClose={isLoading !== LOADING.SEARCH_LOCATION && search !== ""}
           onSearch={handleSearch}
           onSelect={selectSearchItemHandler}
           onClearSearch={handleClearSearch}
@@ -109,5 +116,14 @@ const SearchableMapComponent = () => {
     </div>
   );
 };
+
+SearchableMapComponent.propTypes = {
+  isLoading: PropTypes.string,
+  setLoading: PropTypes.func,
+}
+
+SearchableMapComponent.propTypes = {
+  isLoading: '',
+}
 
 export default SearchableMapComponent;

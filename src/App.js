@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import "./App.css";
 
 const SearchableMap = lazy(() =>
-  import("./modules/SearchableMap/SearchableMap.component")
+  import("./modules/SearchableMap/SearchableMap.container")
 );
 
 function App() {

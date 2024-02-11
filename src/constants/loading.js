@@ -1,0 +1,3 @@
+export const LOADING = {
+  SEARCH_LOCATION: "SEARCH_LOCATION",
+};

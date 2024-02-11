@@ -30,7 +30,7 @@ const SearchBox = (props) => {
         placeholder="Search"
         prefix={<SearchOutlined style={styles.searchIcon} />}
         suffix={shwoClose
-          ? <CloseOutlined style={styles.searchIcon} onClick={onClearSearch}/>
+          ? <CloseOutlined style={styles.closeIcon} onClick={onClearSearch}/>
           : (isLoading && <LoadingOutlined style={styles.loadingIcon} />)
         }
       />
