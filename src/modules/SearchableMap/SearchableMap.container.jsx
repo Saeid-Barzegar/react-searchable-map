@@ -1,18 +1,29 @@
 import { setIsLoading } from "../../store/reducers/commonSlice";
-import SearchableMapComponent from "./SearchableMap.component";
 import { useDispatch, useSelector } from "react-redux";
+import { getGeoLocationSearchResult, setLocations, addToSearchHistory } from "./model/mapSlice";
+import SearchableMapComponent from "./SearchableMap.component";
+import withModal from "../../components/withModal/withModal";
  
 
-const SearchableMapContainer = () => {
+const SearchableMapContainer = (props) => {
+
   const dispatch = useDispatch();
-  const commonState = useSelector(state => state.common)
+  const commonState = useSelector(state => state.common);
+  const mapState = useSelector(state => state.map);
 
   const componentProps = {
     isLoading: commonState.isLoading,
-    setLoading: (value) => dispatch(setIsLoading(value)),
+    locations: mapState.locations,
+    searchHistory: mapState.searchHistory,
+    searchInfo: mapState.searchInfo,
+    setLoading: value => dispatch(setIsLoading(value)),
+    setLocations: value => dispatch(setLocations(value)),
+    getGeoLocations: text => dispatch(getGeoLocationSearchResult(text)),
+    addToHistory: item => dispatch(addToSearchHistory(item)),
+    ...props
   };
 
   return <SearchableMapComponent {...componentProps} />
 }
 
-export default SearchableMapContainer;
+export default withModal(SearchableMapContainer);

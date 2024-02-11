@@ -1,0 +1,30 @@
+.css-dev-only-do-not-override-13l5ai0.ant-select-single {
+  width: 300px;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+}
+.css-dev-only-do-not-override-13l5ai0.ant-select-single .ant-select-selector .ant-select-selection-search-input {
+  width: 300px;
+  font-size: 16px;
+  color: #3e3e3e;
+  box-shadow: 2px 2px 9px 0px rgb(192 190 190);
+}
+
+.searchIcon {
+  font-size: 20px;
+  padding: 5px;
+  color: gray;
+}
+
+.closeIcon {
+  color: gray;
+  font-size: 14px;
+  padding: 8px;
+  margin-right: -6px;
+  z-index: 9999;
+}
+
+.loadingIcon {
+  color: gray;
+}
