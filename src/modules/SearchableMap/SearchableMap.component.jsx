@@ -75,15 +75,21 @@ const SearchableMapComponent = props => {
     getUserLocation();
   }, [getUserLocation]); 
   
+  const clearLocations = () => setLocations([]);
+
   const handleSearch = async (text) => {
     if (isEmpty(text)) {
-      setLocations([]);
+      clearLocations();
     } else {
-      await getGeoLocations(text)
-      setState(state => ({
-        ...state,
-        showList: true
-      }));
+      if (text.length > 2) {
+        await getGeoLocations(text)
+        setState(state => ({
+          ...state,
+          showList: true
+        }));
+      } else {
+        clearLocations();
+      }
     }
     setState(state => ({
       ...state,
@@ -98,7 +104,7 @@ const SearchableMapComponent = props => {
       selected: null,
       showList: false
     }))
-    setLocations([]);
+    clearLocations();
   }
 
   const selectSearchItemHandler = info => {

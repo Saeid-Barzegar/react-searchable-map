@@ -28,3 +28,9 @@
 .loadingIcon {
   color: gray;
 }
+
+.infoIcon {
+  width: 14px;
+  height: 14px;
+  color: rgb(170, 170, 170);
+}

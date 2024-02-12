@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { ConfigProvider, Input, AutoComplete } from 'antd';
-import { CloseOutlined, LoadingOutlined, SearchOutlined } from '@ant-design/icons';
+import { ConfigProvider, Input, AutoComplete, Tooltip } from 'antd';
+import { CloseOutlined, LoadingOutlined, SearchOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import './style.css'
 
@@ -17,6 +17,8 @@ const SearchInput = props => {
     ...otherProps
   } = props;
 
+  const notFound = useMemo(() => showlist && (isEmpty(value) ? '' : "No result"), [showlist]);
+  
   return (
     <ConfigProvider theme={{
       components: {
@@ -35,16 +37,24 @@ const SearchInput = props => {
         options={options}
         open={showlist}
         backfill
-        notFoundContent={isEmpty(value) ? '' : "No result"}
+        notFoundContent={notFound}
         {...otherProps}
       >
         <Input
           height={40}
-          placeholder="Search"
+          placeholder={"Search"}
           prefix={<SearchOutlined className='searchIcon' />}
           suffix={showclose
             ? <CloseOutlined className='closeIcon' onClick={onClearSearch}/>
-            : (loading && <LoadingOutlined className='loadingIcon' />)
+            : (
+              loading
+                ? <LoadingOutlined className='loadingIcon' />
+                : (
+                  <Tooltip title="Type 3 characters to start search">
+                    <InfoCircleOutlined className='infoIcon'/>
+                  </Tooltip>
+                )
+              )
           }
         />
       </AutoComplete>
