@@ -1,12 +1,14 @@
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
 }
 
 .title {
-  font-size: 14;
+  font-size: 11pt !important;
+  margin: 0 !important;
 }
 
 .details {
-  font-size: 12;
+  font-size: 9pt !important;
+  font-style: italic;
 }

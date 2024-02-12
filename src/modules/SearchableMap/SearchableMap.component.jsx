@@ -6,10 +6,15 @@ import PropTypes from "prop-types";
 import SearchBox from "../../components/SearchInput/SearchInput";
 import SearchListItem from "../../components/SearchListItem/SearchListItem";
 import { LOADING } from "../../constants/loading";
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Typography, Row, Col } from "antd";
 // styles
 import "mapbox-gl/dist/mapbox-gl.css";
+import ModalHeader from "./components/ModalHeader/ModalHeader";
+import ModalContent from "./components/ModalContent/ModalContent";
 
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+const { Title, Text } = Typography;
 
 const SearchableMapComponent = props => {
   const {
@@ -193,6 +198,16 @@ const SearchableMapComponent = props => {
     }));
   };
 
+  const markerClickHandler = () => {
+    const { showModal, setModalData } = props;
+    const selectedLocation = locations.filter(item => item.id === state.selected.id)[0];
+    setModalData({
+      title: <ModalHeader title="Location Information"/>,
+      content: <ModalContent name={selectedLocation.text} address={selectedLocation.place_name}/>,
+    });
+    showModal(true);
+  }
+
   useEffect(() => {
     setState(state => ({
       ...state,
@@ -238,20 +253,7 @@ const SearchableMapComponent = props => {
             longitude={state.selected.longitude}
             anchor="bottom"
             pitchAlignment="map"
-            onClick={() => {
-              const { showModal, setModalData } = props;
-              const selectedLocation = locations.filter(item => item.id === state.selected.id)[0];
-              setModalData({
-                title: <h3 style={{margin: 0, cursor: 'move'}}>Information</h3>,
-                content: (
-                  <div>
-                    <h3>{selectedLocation.text}</h3>
-                    <p><b>Address:</b> {selectedLocation.place_name}</p>
-                  </div>
-                ),
-              });
-              showModal(true)
-            }}
+            onClick={markerClickHandler}
           />
         )}
       </MapGL>

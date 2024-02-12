@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { StyleProvider } from "@ant-design/cssinjs";
-import "./App.css";
+import FallBack from "./components/FallBack/FallBack";
 
 const SearchableMap = lazy(() =>
   import("./modules/SearchableMap/SearchableMap.container")
@@ -8,11 +8,11 @@ const SearchableMap = lazy(() =>
 
 function App() {
   return (
-    <Suspense fallback={<h2>Loading...</h2>}>
-      <StyleProvider hashPriority="high">
+    <StyleProvider hashPriority="high">
+      <Suspense fallback={<FallBack />}>
         <SearchableMap />
-      </StyleProvider>
-    </Suspense>
+      </Suspense>
+    </StyleProvider>
   );
 }
 

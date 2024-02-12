@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
+import { Row, Typography } from 'antd';
 import './styles.css'
+
+const { Text, Title } = Typography;
 
 const SearchListItem = props => {
   const { title, details } = props;
   return (
-    <div className='container'>
-      <b className='title'>{title}</b>
-      {!isEmpty(details) && <span className='details'>{details}</span>}
-    </div>
+    <Row className='container'>
+      <Title className='title'>{title}</Title>
+      {!isEmpty(details) && <Text className='details'>{details}</Text>}
+    </Row>
   );
 };
 

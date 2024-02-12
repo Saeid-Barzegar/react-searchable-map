@@ -1,8 +1,7 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { ConfigProvider, Input, AutoComplete, Tooltip } from 'antd';
+import { Input, AutoComplete, Tooltip } from 'antd';
 import { CloseOutlined, LoadingOutlined, SearchOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
 import './style.css'
 
 const SearchInput = props => {

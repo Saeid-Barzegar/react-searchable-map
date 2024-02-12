@@ -1,0 +1,15 @@
+.fallback-container {
+  height: 100dvh;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(128, 128, 128, 0.382);
+}
+
+.loading {
+  color: gray;
+  font-size: 32pt;
+  margin-top: -100px;
+  z-index: 999;
+}

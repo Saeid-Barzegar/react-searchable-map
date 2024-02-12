@@ -11,6 +11,12 @@ const withModal = (Component) => {
         title: "",
         content: null,
       },
+      bounds: {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      },
     });
 
     const additionalProps = {
@@ -19,20 +25,15 @@ const withModal = (Component) => {
           ...state,
           showModal: value,
         })),
-      setModalData: (data) =>
+      setModalData: (data) => {
         setState((state) => ({
           ...state,
           modalData: {
             title: data.title,
             content: data.content,
           },
-          bounds: {
-            left: 0,
-            top: 0,
-            bottom: 0,
-            right: 0,
-          },
-        })),
+        }));
+      },
     };
 
     const onDragModal = (_event, uiData) => {
@@ -60,7 +61,7 @@ const withModal = (Component) => {
     };
 
     return (
-      <div>
+      <>
         <Component {...additionalProps} />
         <Modal
           title={state.modalData.title}
@@ -88,7 +89,7 @@ const withModal = (Component) => {
         >
           {state.modalData.content}
         </Modal>
-      </div>
+      </>
     );
   };
 };
