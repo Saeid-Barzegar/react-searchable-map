@@ -1,8 +1,9 @@
 import { setIsLoading } from "../../store/reducers/commonSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getGeoLocationSearchResult, setLocations, addToSearchHistory } from "./model/mapSlice";
+import { setLocations, addToSearchHistory } from "./model/mapSlice";
 import SearchableMapComponent from "./SearchableMap.component";
 import withModal from "../../components/withModal/withModal";
+import { getGeoLocationSearchResult } from "./utils/helpers";
  
 
 const SearchableMapContainer = (props) => {

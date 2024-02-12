@@ -243,7 +243,7 @@ const SearchableMapComponent = props => {
 };
 
 SearchableMapComponent.propTypes = {
-  isLoading: PropTypes.string.isRequired,
+  isLoading: PropTypes.string,
   setLoading: PropTypes.func.isRequired,
   locations: PropTypes.arrayOf(PropTypes.object).isRequired,
   setLocations: PropTypes.func.isRequired,
@@ -252,5 +252,10 @@ SearchableMapComponent.propTypes = {
   searchInfo: PropTypes.arrayOf(PropTypes.object).isRequired,
   addToHistory: PropTypes.func.isRequired,
 };
+
+SearchableMapComponent.defaultProps = {
+  isLoading: false,
+  locations: []
+}
 
 export default SearchableMapComponent;
