@@ -1,9 +1,11 @@
-.css-dev-only-do-not-override-13l5ai0.ant-select-single {
-  width: 300px;
-  top: 10px;
-  left: 10px;
-  z-index: 999;
+.css-dev-only-do-not-override-1rqnfsa.ant-select-single {
+    font-size: 14px;
+    height: 32px;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 300px;
 }
+
 .css-dev-only-do-not-override-13l5ai0.ant-select-single .ant-select-selector .ant-select-selection-search-input {
   width: 300px;
   font-size: 16px;

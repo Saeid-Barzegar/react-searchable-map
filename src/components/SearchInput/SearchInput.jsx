@@ -17,48 +17,35 @@ const SearchInput = props => {
     ...otherProps
   } = props;
 
-  const notFound = useMemo(() => showlist && (isEmpty(value) ? '' : "No result"), [showlist]);
-  
+
   return (
-    <ConfigProvider theme={{
-      components: {
-        AutoComplete: {
-          background: 'orange',
-          width: 300,
-          marginTop: 20,
-          marginLeft: 20,
-          zIndex: 999,
-        }
-      }
-    }}>
-      <AutoComplete
-        value={value}
-        popupMatchSelectWidth={300}
-        options={options}
-        open={showlist}
-        backfill
-        notFoundContent={notFound}
-        {...otherProps}
-      >
-        <Input
-          height={40}
-          placeholder={"Search"}
-          prefix={<SearchOutlined className='searchIcon' />}
-          suffix={showclose
-            ? <CloseOutlined className='closeIcon' onClick={onClearSearch}/>
-            : (
-              loading
-                ? <LoadingOutlined className='loadingIcon' />
-                : (
-                  <Tooltip title="Type 3 characters to start search">
-                    <InfoCircleOutlined className='infoIcon'/>
-                  </Tooltip>
-                )
+    <AutoComplete
+      value={value}
+      popupMatchSelectWidth={300}
+      options={options}
+      open={showlist}
+      backfill
+      notFoundContent={value.length < 3 ? '' : "Not found"}
+      {...otherProps}
+    >
+      <Input
+        height={40}
+        placeholder={"Search"}
+        prefix={<SearchOutlined className='searchIcon' />}
+        suffix={showclose
+          ? <CloseOutlined className='closeIcon' onClick={onClearSearch}/>
+          : (
+            loading
+              ? <LoadingOutlined className='loadingIcon' />
+              : (
+                <Tooltip title="Type 3 characters to start search">
+                  <InfoCircleOutlined className='infoIcon'/>
+                </Tooltip>
               )
-          }
-        />
-      </AutoComplete>
-    </ConfigProvider>
+            )
+        }
+      />
+    </AutoComplete>
   )
 };
 

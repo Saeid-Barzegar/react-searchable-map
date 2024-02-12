@@ -85,7 +85,7 @@ const SearchableMapComponent = props => {
         await getGeoLocations(text)
         setState(state => ({
           ...state,
-          showList: true
+          showList: text.length > 2
         }));
       } else {
         clearLocations();
@@ -196,9 +196,9 @@ const SearchableMapComponent = props => {
   useEffect(() => {
     setState(state => ({
       ...state,
-      showList: canShowHistory && isEmpty(locationData)
+      showList: canShowHistory && isEmpty(locations)
     }))
-  }, [canShowHistory, locationData]);
+  }, [canShowHistory, locations]);
 
   return (
     <MapProvider>
