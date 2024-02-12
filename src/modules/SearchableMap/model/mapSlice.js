@@ -5,8 +5,6 @@ import { getGeoLocationSearchResult } from "../utils/helpers";
 const initialState = {
   searchHistory: [],
   locations: [],
-  searchInfo: [],
-  error: null,
 };
 
 const mapSlice = createSlice({
@@ -22,14 +20,9 @@ const mapSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getGeoLocationSearchResult.fulfilled, (state, action) => {
-        state.locations = action.payload.locations;
-        state.searchInfo = action.payload.searchInfo;
-      })
-      .addCase(getGeoLocationSearchResult.rejected, (state, action) => {
-        state.error = action.error.message;
-      });
+    builder.addCase(getGeoLocationSearchResult.fulfilled, (state, action) => {
+      state.locations = action.payload;
+    });
   },
 });
 

@@ -16,7 +16,6 @@ const SearchableMapContainer = (props) => {
     isLoading: commonState.isLoading,
     locations: mapState.locations,
     searchHistory: mapState.searchHistory,
-    searchInfo: mapState.searchInfo,
     setLoading: value => dispatch(setIsLoading(value)),
     setLocations: value => dispatch(setLocations(value)),
     getGeoLocations: text => dispatch(getGeoLocationSearchResult(text)),

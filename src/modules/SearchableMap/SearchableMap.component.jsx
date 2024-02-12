@@ -19,7 +19,6 @@ const SearchableMapComponent = props => {
     getGeoLocations,
     addToHistory,
     searchHistory,
-    searchInfo
   } = props;
 
   const mapRef = useRef(null);
@@ -39,15 +38,19 @@ const SearchableMapComponent = props => {
     }
   })
 
-  const locationData = useMemo(() => locations.map(item => ({
-    ...item,
-    label: (
-      <SearchListItem
-        title={get(item, "label.title", "")}
-        details={get(item, "label.details", "")}
-      />
-    ),
-  })), [locations]);
+  const locationData = useMemo(() => locations.map(item => {
+    const locationId = get(item, 'id', '');
+    const coordinates = get(item, 'geometry.coordinates');
+    return ({
+      label: (
+        <SearchListItem
+          title={get(item, "text", "")}
+          details={get(item, "place_name", "")}
+        />
+      ),
+      value: [locationId, coordinates]
+    });
+  }), [locations]);
 
   const canShowHistory = useMemo(() => isEmpty(state.search)
     && isEmpty(locationData)
@@ -69,7 +72,7 @@ const SearchableMapComponent = props => {
   }, []);
 
   useEffect(() => {
-    getUserLocation()
+    getUserLocation();
   }, [getUserLocation]); 
   
   const handleSearch = async (text) => {
@@ -78,9 +81,9 @@ const SearchableMapComponent = props => {
     } else {
       await getGeoLocations(text)
       setState(state => ({
-      ...state,
-      showList: true
-    }));
+        ...state,
+        showList: true
+      }));
     }
     setState(state => ({
       ...state,
@@ -98,33 +101,41 @@ const SearchableMapComponent = props => {
     setLocations([]);
   }
 
-  const selectSearchItemHandler = coordinate => {
+  const selectSearchItemHandler = info => {
+    const locationId = info[0];
+    const longitude = info[1][0];
+    const latitude = info[1][1];
+
     if (canShowHistory) {
-      const selectedItem = searchHistory.filter(item => item.value[0] === coordinate[0])[0]
+      const selectedItem = searchHistory.filter(item => {
+        const itemId = item.value[0];
+        return (itemId === locationId)
+      })[0]
       handleSearch(selectedItem.label)
       return setState(state => ({
         ...state,
-        search: selectedItem.label,
+        search: selectedItem?.label,
         showList: true,
       }))
     }
-    if (!isEmpty(state.search) && searchHistory.filter(item => item.label === state.search).length === 0) {
+    if (!isEmpty(state.search) && isEmpty(searchHistory.find(item => item.label === state.search))) {
       addToHistory({
         label: state.search,
-        value: coordinate,
+        value: info,
       });
     }
     setState(state => ({
       ...state,
       showList: false,
       selected: {
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        id: locationId,
+        longitude,
+        latitude
       },
       viewport: {
         ...state.viewport,
-        longitude: coordinate[0],
-        latitude: coordinate[1],
+        longitude,
+        latitude,
         zoom: 15
       }
     }));
@@ -135,8 +146,8 @@ const SearchableMapComponent = props => {
       ...state,
       viewport: {
         ...state.viewport,
-        latitude: event.coords.latitude,
-        longitude: event.coords.longitude
+        latitude: get(event,'coords.latitude'),
+        longitude: get(event,'coords.longitude')
       }
     }));
   };
@@ -157,7 +168,7 @@ const SearchableMapComponent = props => {
       ...state,
       viewport: {
         ...state.viewport,
-        zoom: event.viewState.zoom
+        zoom: get(event, 'viewState.zoom')
       }
     }));
   };
@@ -223,13 +234,13 @@ const SearchableMapComponent = props => {
             pitchAlignment="map"
             onClick={() => {
               const { showModal, setModalData } = props;
-              const selectedPoint = searchInfo?.filter(info => info?.center[0] === state?.selected?.longitude)[0];
+              const selectedLocation = locations.filter(item => item.id === state.selected.id)[0];
               setModalData({
                 title: <h3 style={{margin: 0, cursor: 'move'}}>Information</h3>,
                 content: (
                   <div>
-                    <h3>{selectedPoint.text}</h3>
-                    <p><b>Address:</b> {selectedPoint.place_name}</p>
+                    <h3>{selectedLocation.text}</h3>
+                    <p><b>Address:</b> {selectedLocation.place_name}</p>
                   </div>
                 ),
               });
@@ -249,7 +260,6 @@ SearchableMapComponent.propTypes = {
   setLocations: PropTypes.func.isRequired,
   getGeoLocations: PropTypes.func.isRequired,
   searchHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
-  searchInfo: PropTypes.arrayOf(PropTypes.object).isRequired,
   addToHistory: PropTypes.func.isRequired,
 };
 

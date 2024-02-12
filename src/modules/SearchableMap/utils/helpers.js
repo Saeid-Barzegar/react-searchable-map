@@ -14,18 +14,8 @@ export const getGeoLocationSearchResult = createAsyncThunk(
     dispatch(setIsLoading(LOADING.SEARCH_LOCATION));
     try {
       const response = await axios.get(endpoint);
-      const data = get(response, "data.features", []);
-      const locations = data.map((item) => ({
-        value: get(item, "center", ""),
-        label: {
-          title: get(item, "text", ""),
-          details: get(item, "place_name", ""),
-        },
-      }));
-      return {
-        locations,
-        searchInfo: data,
-      };
+      const locations = get(response, "data.features", []);
+      return locations;
     } catch (error) {
       setError("Error in fetch locations: ", error);
       console.error("Error in fetch locations: ", error);
