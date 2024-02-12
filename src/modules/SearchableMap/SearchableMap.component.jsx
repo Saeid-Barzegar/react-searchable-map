@@ -6,15 +6,12 @@ import PropTypes from "prop-types";
 import SearchBox from "../../components/SearchInput/SearchInput";
 import SearchListItem from "../../components/SearchListItem/SearchListItem";
 import { LOADING } from "../../constants/loading";
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Typography, Row, Col } from "antd";
 // styles
 import "mapbox-gl/dist/mapbox-gl.css";
 import ModalHeader from "./components/ModalHeader/ModalHeader";
 import ModalContent from "./components/ModalContent/ModalContent";
 
 const MAPBOX_ACCESS_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-const { Title, Text } = Typography;
 
 const SearchableMapComponent = props => {
   const {
