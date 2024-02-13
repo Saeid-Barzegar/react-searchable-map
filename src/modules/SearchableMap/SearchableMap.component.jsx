@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo, startTransition } from "react";
 import MapGL, { NavigationControl, FullscreenControl, MapProvider, ScaleControl, GeolocateControl, Marker } from "react-map-gl";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
@@ -79,16 +79,18 @@ const SearchableMapComponent = props => {
   
   const clearLocations = () => setLocations([]);
 
-  const handleSearch = async (text) => {
+  const handleSearch = (text) => {
     if (isEmpty(text)) {
       clearLocations();
     } else {
       if (text.length > 2) {
-        await getGeoLocations(text)
-        setState(state => ({
-          ...state,
-          showList: text.length > 2
-        }));
+        startTransition(async () => {
+          await getGeoLocations(text)
+          setState(state => ({
+            ...state,
+            showList: text.length > 2
+          }));
+        });
       } else {
         clearLocations();
       }
